@@ -11,17 +11,12 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     compile("javax.el:javax.el-api:2.2.4")
-    compile("org.glassfish.web:javax.el:2.2.4")
-    compile project(':zjex_proxy_channel')
-    compile project(':zjex_proxy_shiro')
-    compile project(':zjex_proxy_core')
-    compile project(':zjex_proxy_core_redis')
-    compile project(':zjex_common')
-    compile project(':zjex_message')
     compile("org.springframework.boot:spring-boot-starter-web-services")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-actuator")
 	compile("com.websuits:utils:1.0")
+	
+    // pdf依赖jar		
     compile("com.itextpdf:itextpdf:5.5.10")
     compile("com.itextpdf:itext-asian:5.2.0")
 
