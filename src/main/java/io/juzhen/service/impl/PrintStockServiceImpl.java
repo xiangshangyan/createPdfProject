@@ -52,7 +52,7 @@ public class PrintStockServiceImpl extends AssemblePDFData {
     @Override
     protected Map getHeadInfo(Map map) {
         Map<String, Object> headInfo = new HashMap<>();
-        headInfo.put("firstHeadInfo", "浙江股权交易中心    托管公司（管理） 客户持股明细");
+        headInfo.put("firstHeadInfo", "某某交易中心    托管公司（管理） 客户持股明细");
         headInfo.put("secondHeadInfo", map.get(PrintStockVO.class.getSimpleName()));
         return headInfo;
     }
@@ -104,7 +104,7 @@ public class PrintStockServiceImpl extends AssemblePDFData {
     public Paragraph createPdfFirst(Document document, BaseFont bfChinese, Font fontChina18, Font fontChina15, Font fontChina12, Map headInfo) throws DocumentException {
     	PrintStockVO printStockVO = (PrintStockVO) headInfo.get("secondHeadInfo");
     	
-    	Paragraph titleParagraph = new Paragraph("浙江股权交易中心    托管公司（管理） 客户持股明细", fontChina18);
+    	Paragraph titleParagraph = new Paragraph("某某交易中心    托管公司（管理） 客户持股明细", fontChina18);
         titleParagraph.setAlignment(Element.ALIGN_CENTER);// 居中
         document.add(titleParagraph);
 
