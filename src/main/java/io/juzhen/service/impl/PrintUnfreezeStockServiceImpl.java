@@ -34,7 +34,7 @@ public class PrintUnfreezeStockServiceImpl extends AssemblePDFData {
     protected Map getHeadInfo(Map map) {
         Map<String, String> headInfo = new HashMap<>();
         String className = PrintUnfreeStockVO.class.getSimpleName();
-        headInfo.put("firstHeadInfo", "浙江股权交易中心    托管公司（管理）");
+        headInfo.put("firstHeadInfo", "某某交易中心    托管公司（管理）");
         headInfo.put("secondHeadInfo", "【份额解冻】凭证");
         headInfo.put("orderId", ((PrintUnfreeStockVO) map.get(className)).getOrderId());
         return headInfo;
