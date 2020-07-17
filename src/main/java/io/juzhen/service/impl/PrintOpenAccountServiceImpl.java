@@ -34,7 +34,7 @@ public class PrintOpenAccountServiceImpl extends AssemblePDFData {
     @Override
     protected Map getHeadInfo(Map map) {
         Map<String, String> headInfo = new HashMap<>();
-        headInfo.put("firstHeadInfo", "浙江股权交易中心    浙江托管服务有限公司");
+        headInfo.put("firstHeadInfo", "某某交易中心    浙江托管服务有限公司");
         headInfo.put("secondHeadInfo", "开户申请表");
         // 流水号
         headInfo.put("orderId", "");
