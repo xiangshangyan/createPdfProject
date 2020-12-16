@@ -273,10 +273,4 @@ public interface BusinessHandleService {
      */
     BaseResp modifyCompanyFlag(ModifyCompanyFlagVO modifyCompanyFlagVO);
 
-	/**
-	 * 校验交易密码
-	 * @param validTranPwdVO
-	 * @return
-	 */
-	BaseResp validTranPwd(ValidTranPwdVO validTranPwdVO);
 }
