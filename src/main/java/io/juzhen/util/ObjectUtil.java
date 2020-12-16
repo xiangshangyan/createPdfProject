@@ -23,17 +23,6 @@ public class ObjectUtil {
 		T object = JsonUtils.readValue(jsonStr, clazz);
 		return object;
 	}
-
-	/**
-	 * 转换map到对象
-	 * @param map
-	 * @param clazz
-	 * @return
-	 */
-	public static <T> T convertMapToBean(Map map, Class<T> clazz) {
-		T object = JsonUtils.readValue(JsonUtils.toJson(map), clazz);
-		return object;
-	}
 	
 	/**
 	 * 转换bena到Map
