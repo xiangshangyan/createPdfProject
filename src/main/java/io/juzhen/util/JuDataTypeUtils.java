@@ -1,10 +1,8 @@
 package io.juzhen.util;
 
-import io.juzhen.channel.dto.BaseRspDTO;
-
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 数据为null的返回处理
@@ -14,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
 public class JuDataTypeUtils {
 	
 	public static String getString(String str){
-		return str == null || StringUtils.equals(str, "") ? null : str;
+		return str == null || StringUtils.endsWithIgnoreCase(str, "") ? null : str;
 	}
 	
 	public static Integer getInt(Integer integer){
@@ -50,20 +48,6 @@ public class JuDataTypeUtils {
 		}
 		String str = sb.toString();
 		return str.substring(0, sb.length() - 1);
-	}
-	
-	/**
-	 * 根据返回消息data数据判断是否返回成功
-	 * @param dto
-	 * @return
-	 */
-	public static boolean checkDataCode(BaseRspDTO dto){
-		if (dto != null ) {
-			if (dto.getCode() == 0) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	/**

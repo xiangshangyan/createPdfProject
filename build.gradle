@@ -1,4 +1,5 @@
-//apply plugin: 'war'
+apply plugin: 'java'
+apply plugin: 'maven'
 repositories {
     //maven {
     //url "http://192.168.10.40:8081/nexus/content/groups/public"
@@ -22,7 +23,7 @@ dependencies {
 
     compile("io.springfox:springfox-swagger2:2.6.1")
     compile("io.springfox:springfox-swagger-ui:2.6.1")
-
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.75'
     //compile("org.springframework.boot:spring-boot-autoconfigure")
 
     testCompile("junit:junit")

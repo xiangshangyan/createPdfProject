@@ -1,23 +1,19 @@
 package io.juzhen.service.impl;
 
-import io.juzhen.channel.dto.BaseRspDTO;
-import io.juzhen.channel.dto.querymanager.CustinfoQueryDTO;
-import io.juzhen.channel.dto.querymanager.SharesinfoQueryDTO;
-import io.juzhen.channel.service.QueryManagerService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import io.juzhen.service.AssemblePDFData;
-import io.juzhen.util.BaseRespUtils;
 import io.juzhen.util.JuDataTypeUtils;
 import io.juzhen.util.PDFConstant;
 import io.juzhen.util.PdfUtil;
-import io.juzhen.utils.DateTimeUtil;
-import io.juzhen.vo.business.PrintStockVO;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Resource;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -31,29 +27,22 @@ import com.itextpdf.text.pdf.PdfPTable;
 
 /**
  * Desc:
- * Created by jinx on 2017/10/10.
+ * Created by xiangshang on 2017/10/10.
  */
 @Service
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class PrintStockServiceImpl extends AssemblePDFData {
 	
-	@Resource
-    private QueryManagerService queryManagerService;
-	
     @Override
     protected <T> Object assembleCustinfoQueryDTO(T t) {
-        PrintStockVO printStockVO = (PrintStockVO) t;
-        CustinfoQueryDTO custinfoQueryDTO = new CustinfoQueryDTO(10, 1);
-        custinfoQueryDTO.setCustno(printStockVO.getCustNo());
-        custinfoQueryDTO.setCertificateno(printStockVO.getCertNo());
-        return custinfoQueryDTO;
+        // 此处需要根据t转换成需要的数据信息
+        return new Object();
     }
 
     @Override
     protected Map getHeadInfo(Map map) {
         Map<String, Object> headInfo = new HashMap<>();
         headInfo.put("firstHeadInfo", "某某交易中心    托管公司（管理） 客户持股明细");
-        headInfo.put("secondHeadInfo", map.get(PrintStockVO.class.getSimpleName()));
         return headInfo;
     }
 
@@ -102,8 +91,10 @@ public class PrintStockServiceImpl extends AssemblePDFData {
 
     @Override
     public Paragraph createPdfFirst(Document document, BaseFont bfChinese, Font fontChina18, Font fontChina15, Font fontChina12, Map headInfo) throws DocumentException {
-    	PrintStockVO printStockVO = (PrintStockVO) headInfo.get("secondHeadInfo");
-    	
+        if (Objects.isNull(headInfo)) {
+            return new Paragraph("某某交易中心    托管公司（管理） 客户持股明细", fontChina18);
+        }
+
     	Paragraph titleParagraph = new Paragraph("某某交易中心    托管公司（管理） 客户持股明细", fontChina18);
         titleParagraph.setAlignment(Element.ALIGN_CENTER);// 居中
         document.add(titleParagraph);
@@ -115,20 +106,9 @@ public class PrintStockServiceImpl extends AssemblePDFData {
 
         // 客户号、姓名
         Paragraph snoParagraph = new Paragraph();
-        PdfUtil.addChunk( snoParagraph, fontChina12, "客户号：", printStockVO.getCustNo(), 0);
-        PdfUtil.addChunk( snoParagraph, fontChina12, "姓名：", printStockVO.getName(), 110);
+        PdfUtil.addChunk( snoParagraph, fontChina12, "客户号：", headInfo.get("custNo").toString(), 0);
+        PdfUtil.addChunk( snoParagraph, fontChina12, "姓名：", headInfo.get("name").toString(), 110);
         document.add(snoParagraph);
-
-        // 证件类型  、证件号码
-        Paragraph snoParagraph1 = new Paragraph();
-        PdfUtil.addChunk(snoParagraph1, fontChina12, "证件类型：", printStockVO.getCertTypeName(), 0);
-        PdfUtil.addChunk( snoParagraph1, fontChina12, "证件号码：", printStockVO.getCertNo(), 120);
-        document.add(snoParagraph1);
-
-        // 打印时间
-        Paragraph snoParagraph2 = new Paragraph();
-        PdfUtil.addChunk( snoParagraph2, fontChina12, "打印时间：", PdfUtil.getDateFormatString(DateTimeUtil.STR_PART_CHINESE_PATTERN), 0);
-        document.add(snoParagraph2);
 
         // 添加一个空格
         document.add(blank1);
@@ -142,29 +122,14 @@ public class PrintStockServiceImpl extends AssemblePDFData {
     
     @Override
     protected <T> Map selectData(T t) {
-    	CustinfoQueryDTO custinfoQueryDTO = (CustinfoQueryDTO) this.assembleCustinfoQueryDTO(t);
-		BaseRspDTO custinfo = queryManagerService.getCustinfo(custinfoQueryDTO);
-		Map map = BaseRespUtils.respMap(custinfo);
+    	Object custinfoQueryDTO = this.assembleCustinfoQueryDTO(t);
+		Map map = JSONObject.parseObject(JSON.toJSONString(custinfoQueryDTO), Map.class);
 		map.put(t.getClass().getSimpleName(), t);
 
-		// 如果是持仓信息凭证打印，多查询一步
-		String taaccountid = (String) map.get("taaccountid");
-		SharesinfoQueryDTO sharesinfoQueryDTO = new SharesinfoQueryDTO(taaccountid, 2, 1);
-		// 查询持仓信息
-		BaseRspDTO sharesinfo = queryManagerService.getSharesinfo(sharesinfoQueryDTO);
-		List<Map<String, String>> dataList = (List<Map<String, String>>) sharesinfo.getData();
-		Object sharesinfodata = null;
-		if (dataList != null && dataList.size() > 0) {
-			// 持仓信息总条数
-			String count = dataList.get(0).get("ROWSCOUNT");
-			// 根据持仓信息总条数再进行查询
-			BaseRspDTO sharesinfos = queryManagerService.getSharesinfo(new SharesinfoQueryDTO(taaccountid, Integer.parseInt(count), 1));
-			if (JuDataTypeUtils.checkDataCode(sharesinfos)) {
-				sharesinfodata = sharesinfos.getData();
-			}
-		}
+		// 如果是持仓信息凭证打印，多查询一步,此处是获取的数据源
+		List<Map<String, String>> dataList = new ArrayList<>();
 		// 客户的持仓信息
-		map.put(PDFConstant.PRINT_STOCK_INFO_KEY, sharesinfodata);
+		map.put(PDFConstant.PRINT_STOCK_INFO_KEY, null);
 		return map;
     }
     

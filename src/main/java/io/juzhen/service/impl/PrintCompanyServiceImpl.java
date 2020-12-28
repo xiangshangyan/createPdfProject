@@ -5,12 +5,10 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 
-import io.juzhen.channel.dto.querymanager.CustinfoQueryDTO;
 import io.juzhen.service.AssemblePDFData;
 import io.juzhen.util.JuDataTypeUtils;
 import io.juzhen.util.PDFConstant;
 import io.juzhen.util.PdfUtil;
-import io.juzhen.vo.business.CompanyInfoVo;
 
 import org.springframework.stereotype.Service;
 
@@ -25,11 +23,9 @@ import java.util.Map;
 public class PrintCompanyServiceImpl extends AssemblePDFData {
 
     @Override
-    protected <T > CustinfoQueryDTO assembleCustinfoQueryDTO(T t) {
-        CompanyInfoVo companyInfoVo = (CompanyInfoVo) t;
-        CustinfoQueryDTO custinfoQueryDTO = new CustinfoQueryDTO(10, 1);
-        custinfoQueryDTO.setTaaccountid(companyInfoVo.getAccount());
-        return custinfoQueryDTO;
+    protected <T > Object assembleCustinfoQueryDTO(T t) {
+        // 根据t转换需要的数据 todo
+        return new Object();
     }
 
     @Override
@@ -42,15 +38,7 @@ public class PrintCompanyServiceImpl extends AssemblePDFData {
 
     @Override
     public void createPdfTableData(Font fontChina12, PdfPTable table, Map resMap) {
-        CompanyInfoVo companyInfoVo = (CompanyInfoVo) resMap.get(CompanyInfoVo.class.getSimpleName());
 
-		/* 企业全称 */
-        PdfUtil.addTableCell(table, "企业全称", fontChina12, false, false, 0, 0);
-        PdfUtil.addTableCell(table, companyInfoVo.getFundName(), fontChina12, true, false, 2, 0);//跨两列
-
-		/* 企业简称 */
-        PdfUtil.addTableCell(table, "企业简称", fontChina12, false, false, 0, 0);
-        PdfUtil.addTableCell(table, companyInfoVo.getFundAbbr(), fontChina12, true, false, 2, 0);//跨两列
 
 		/* 法定代表人 */
         PdfUtil.addTableCell(table, "法定代表人", fontChina12, false, false, 0, 0);
