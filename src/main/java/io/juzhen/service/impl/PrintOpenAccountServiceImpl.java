@@ -3,12 +3,10 @@ package io.juzhen.service.impl;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
-import io.juzhen.channel.dto.querymanager.CustinfoQueryDTO;
 import io.juzhen.service.AssemblePDFData;
 import io.juzhen.util.JuDataTypeUtils;
 import io.juzhen.util.PDFConstant;
 import io.juzhen.util.PdfUtil;
-import io.juzhen.vo.business.PrintOpenAccountVO;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -23,11 +21,8 @@ public class PrintOpenAccountServiceImpl extends AssemblePDFData {
 
     @Override
     protected <T> Object assembleCustinfoQueryDTO(T t) {
-        PrintOpenAccountVO printOpenAccountVO = (PrintOpenAccountVO) t;
-        CustinfoQueryDTO custinfoQueryDTO = new CustinfoQueryDTO(10, 1);
-        // 客户内码
-        custinfoQueryDTO.setCustomerno(printOpenAccountVO.getCustMerno());
-        return custinfoQueryDTO;
+
+        return new Object();
     }
 
 
@@ -74,7 +69,6 @@ public class PrintOpenAccountServiceImpl extends AssemblePDFData {
 
     @Override
     public void createPdfEnd(Document document, BaseFont bfChinese, Font fontChina12, Paragraph blank1, Map resMap) throws DocumentException {
-        PrintOpenAccountVO printOpenAccountVO = (PrintOpenAccountVO)resMap.get(PrintOpenAccountVO.class.getSimpleName()) ;
         // 底部信息  客户签名
         Paragraph pE = new Paragraph("以上打印的客户信息与业务内容已由本人核实确认无误。", fontChina12);
         PdfUtil.addChunk( pE, fontChina12, "客户签名：", " ", 18);
@@ -83,7 +77,7 @@ public class PrintOpenAccountServiceImpl extends AssemblePDFData {
 
         Paragraph pE1 = new Paragraph();
         // 操作柜员 与 业务章
-        PdfUtil.addChunk( pE1, fontChina12, "操作柜员：", printOpenAccountVO.getOperName(), 0);
+        PdfUtil.addChunk( pE1, fontChina12, "操作柜员：", "叫什么", 0);
         PdfUtil.addChunk( pE1, fontChina12, "业务章：", " ", 100);
         pE.setAlignment(Element.ALIGN_LEFT);
         document.add(pE1);
